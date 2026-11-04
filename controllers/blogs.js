@@ -27,22 +27,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  try {
-    const deleted = await Blog.destroy({
-      where: { id: req.params.id },
-    });
-    if (deleted === 0) {
-      return res.status(404).json({ error: "Blog not found" });
-    }
-    return res.status(204).end();
-  } catch (error) {
-    return res.status(400).json({ error });
-  }
+router.delete("/:id", blogFinder, async (req, res) => {
+  await req.blog.destroy()
+  res.status(204).end()
 });
 
-// router.put("/:id", blogFinder, async(req, res) => {
-
-// })
+router.put("/:id", blogFinder, async(req, res) => {
+  req.blog.likes = req.body.likes;
+  await req.blog.save()
+  res.json(req.blog)
+})
 
 module.exports = router
