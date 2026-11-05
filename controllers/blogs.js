@@ -28,7 +28,12 @@ router.post("/", tokenExtractor, async (req, res) => {
 });
 
 router.delete("/:id", tokenExtractor, blogFinder, async (req, res) => {
-  await req.blog.destroy();
+  loggedInUser = req.decodedToken.id;
+  console.log(req.blog.dataValues);
+  if(loggedInUser === req.blog.dataValues.id)
+    await req.blog.destroy();
+  else 
+    res.status(500).json({ "error": "You dont have the permission."})
   res.status(204).end();
 });
 
