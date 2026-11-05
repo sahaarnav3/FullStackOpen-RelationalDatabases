@@ -27,12 +27,12 @@ router.post("/", tokenExtractor, async (req, res) => {
   }
 });
 
-router.delete("/:id", blogFinder, async (req, res) => {
+router.delete("/:id", tokenExtractor, blogFinder, async (req, res) => {
   await req.blog.destroy();
   res.status(204).end();
 });
 
-router.put("/:id", blogFinder, async (req, res) => {
+router.put("/:id", tokenExtractor, blogFinder, async (req, res) => {
   req.blog.likes = req.body.likes;
   await req.blog.save();
   res.json(req.blog);
