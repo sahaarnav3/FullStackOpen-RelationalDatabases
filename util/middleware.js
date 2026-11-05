@@ -9,15 +9,21 @@ const blogFinder = async (req, res, next) => {
 };
 
 const errorHandler = async (error, _req, res, next) => {
-//   console.error("errrrr", error.name);
+  // console.error("errrrr", error);
 
-  if(error.name === 'SequelizeValidationError'){
-    return res.status(400).send({ error: error.message });
-  }
+  // if(error.name === 'SequelizeValidationError'){
+  //   return res.status(400).send({ error: error.message });
+  // }
+
+  if(error.name === "SequelizeValidationError")
+    return res.status(400).send({ error: "username must be a valid email address" });
 
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
   }
+
+  if (error.name === 'SequelizeUniqueConstraintError')
+    return res.status(400).send({ error: "Given username already exists, please try with new username." });
 
   next(error);
 };
