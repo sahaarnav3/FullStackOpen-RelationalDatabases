@@ -1,14 +1,22 @@
 const router = require("express").Router();
 const { Blog, User } = require("../models");
 const { blogFinder, tokenExtractor } = require("../util/middleware");
+const { Op } = require("sequelize");
 
-router.get("/", async (_req, res) => {
+router.get("/", async (req, res) => {
+  const where = {};
+  if (req.query.search)
+    where.title = {
+      [Op.iLike]: `%${req.query.search}`, //made the search case insensitive. (Could also use Op.substring)
+    };
+
   const blogs = await Blog.findAll({
-    attributes: { exclude: ['userId']},
+    attributes: { exclude: ["userId"] },
     include: {
       model: User,
-      attributes: ['name']
-    }
+      attributes: ["name"],
+    },
+    where,
   });
   res.json(blogs);
 });
@@ -30,10 +38,8 @@ router.post("/", tokenExtractor, async (req, res) => {
 router.delete("/:id", tokenExtractor, blogFinder, async (req, res) => {
   loggedInUser = req.decodedToken.id;
   console.log(req.blog.dataValues);
-  if(loggedInUser === req.blog.dataValues.id)
-    await req.blog.destroy();
-  else 
-    res.status(500).json({ "error": "You dont have the permission."})
+  if (loggedInUser === req.blog.dataValues.id) await req.blog.destroy();
+  else res.status(500).json({ error: "You dont have the permission." });
   res.status(204).end();
 });
 
