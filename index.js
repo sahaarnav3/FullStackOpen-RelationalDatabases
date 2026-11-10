@@ -9,12 +9,20 @@ const { syncModels } = require("./models/index");
 const blogsRouter = require("./controllers/blogs");
 const userRouter = require("./controllers/user");
 const loginRouter = require("./controllers/login");
+const resetRouter = require("./controllers/reset");
+const authorRouter = require("./controllers/author");
 
 app.use(express.json());
 
 app.use("/api/blogs", blogsRouter);
-app.use("/api/authors", userRouter);
-app.use("/api/login", loginRouter)
+app.use("/api/users", userRouter);
+app.use("/api/login", loginRouter);
+app.use("/api/reset", resetRouter);
+app.use("/api/authors", authorRouter);
+
+app.get("/", async(_req, res) => {
+  return res.send(200);
+})
 
 app.use(errorHandler);
 
