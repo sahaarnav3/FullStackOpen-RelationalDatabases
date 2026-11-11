@@ -11,6 +11,7 @@ Blog.init(
     },
     author: {
       type: DataTypes.TEXT,
+      allowNull: false
     },
     url: {
       type: DataTypes.TEXT,

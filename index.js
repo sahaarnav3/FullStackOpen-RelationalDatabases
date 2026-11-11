@@ -4,7 +4,6 @@ const { errorHandler } = require("./util/middleware");
 
 const { PORT } = require("./util/config");
 const { connectToDatabase } = require("./util/db");
-const { syncModels } = require("./models/index");
 
 const blogsRouter = require("./controllers/blogs");
 const userRouter = require("./controllers/user");
@@ -28,7 +27,6 @@ app.use(errorHandler);
 
 const start = async () => {
   await connectToDatabase();
-  await syncModels();
   app.listen(PORT, () => {
     console.log(`Server running on PORT: ${PORT}`);
   });

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const { User, Blog } = require("../models");
+const { tokenExtractor, isAdmin } = require("../util/middleware");
 
 router.get("/", async (_req, res) => {
   const users = await User.findAll({
@@ -28,7 +29,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:username", async (req, res) => {
+router.put("/:username", tokenExtractor, isAdmin, async (req, res) => {
   const userResponse = await User.findOne({
     where: {
       username: req.params.username,
@@ -36,6 +37,12 @@ router.put("/:username", async (req, res) => {
   });
   if (userResponse) {
     userResponse.name = req.body.name || userResponse.name;
+    if(req.body.disabled !== null && req.body.disabled !== undefined){
+      if(req.isAdmin)
+        userResponse.disabled = req.body.disabled;
+      else 
+        return res.status(401).json({ error: 'operation not allowed' })
+    }
     await userResponse.save();
     res.json(userResponse);
   } else

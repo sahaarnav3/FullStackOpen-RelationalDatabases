@@ -6,7 +6,8 @@
   "scripts": {
     "test": "TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js",
     "start": "node --watch index.js",
-    "start:test": "TESTING=true node --watch index.js"
+    "start:test": "TESTING=true node --watch index.js",
+    "migration:down": "node util/rollback.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^9.0.3",
     "nodemon": "^3.1.14",
     "pg": "^8.23.1",
-    "sequelize": "^6.37.8"
+    "sequelize": "^6.37.8",
+    "umzug": "^3.8.3"
   }
 }
