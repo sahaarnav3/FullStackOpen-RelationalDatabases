@@ -26,6 +26,16 @@ Blog.init(
       defaultValue: 0,
       allowNull: false,
     },
+    year: {
+      type: DataTypes.INTEGER,
+      validate: {
+        customValidator(value) {
+          const currentYear = new Date().getFullYear();
+          if(value < 1991 || value > currentYear)
+            throw new Error(`Year must be between 1991 and ${currentYear}`)
+        }
+      }
+    }
   },
   {
     sequelize,

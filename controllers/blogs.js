@@ -58,7 +58,8 @@ router.delete("/:id", tokenExtractor, blogFinder, async (req, res) => {
 });
 
 router.put("/:id", tokenExtractor, blogFinder, async (req, res) => {
-  req.blog.likes = req.body.likes;
+  req.blog.likes = req.body.likes || req.blog.likes;
+  req.blog.year = req.body.year || req.blog.year;
   await req.blog.save();
   res.json(req.blog);
 });
